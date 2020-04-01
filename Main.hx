@@ -1,23 +1,45 @@
-import h2d.Scene.ScaleMode;
+package;
 
 class Main extends hxd.App {
 
-    var anim: h2d.Anim;
+    var enemies: h2d.Tile;
+
+    var kite: h2d.Anim;
+    var snake: h2d.Anim;
+    var blob: h2d.Anim;
 
     override function init() {
+        
         s2d.scaleMode = ScaleMode.Zoom(4);
-        var enemies = hxd.Res.Enemies.toTile();
+        enemies = hxd.Res.Enemies.toTile();
+        
+        kite = createAnimation(enemies, 6, 32, 88, 8);
+        kite.x = 16;
+        kite.y = 64;
 
-        var t1 = enemies.sub(32,88,8,8,0,0);
-        var t2 = enemies.sub(40,88,8,8,0,0); 
-        var t3 = enemies.sub(48,88,8,8,0,0); 
-        var t4 = enemies.sub(56,88,8,8,0,0); 
-        var t5 = enemies.sub(64,88,8,8,0,0); 
-        var t6 = enemies.sub(72,88,8,8,0,0);
+        snake = createAnimation(enemies, 3, 32, 40, 8);
+        snake.x = 32;
+        snake.y = 64;
 
-        anim = new h2d.Anim([t1,t2,t3,t4,t5,t6],s2d);
-        anim.speed = 8;
-        //anim.onAnimEnd = function() { trace("animation ended!"); }
+        blob = createAnimation(enemies, 5, 32, 72, 8);
+        blob.x = 48;
+        blob.y = 64;
+    }
+
+    private function createAnimation(tiles: h2d.Tile, count: Int, sx: Int, sy: Int, w: Int): h2d.Anim {
+        
+        var f = new Array<h2d.Tile>();
+        var p: Int = Std.int(w/2);
+
+        for (i in 0...count) {
+            f[i] = tiles.sub(sx,sy,w,w,p,p);
+            sx += w;
+        }
+
+        var a = new h2d.Anim(f, s2d);
+        a.speed = 8;
+
+        return a;
     }
 
     static function main() {
